@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -Wall #-}
+{-# LANGUAGE FlexibleInstances #-}
 module HW04 where
 
 newtype Poly a = P [a]
@@ -49,7 +50,12 @@ instance (Num a, Eq a, Show a) => Show (Poly a) where
 -- Exercise 4 -----------------------------------------
 
 plus :: Num a => Poly a -> Poly a -> Poly a
-plus = undefined
+plus pa (P []) = pa
+plus (P []) pb = pb
+plus (P (pa:pas)) (P (pb:pbs)) = P (pa + pb : pcs)
+    where
+        P pcs = plus (P pas) (P pbs)
+
 
 -- Exercise 5 -----------------------------------------
 
@@ -62,7 +68,7 @@ instance Num a => Num (Poly a) where
     (+) = plus
     (*) = times
     negate      = undefined
-    fromInteger = undefined
+    fromInteger n = P [n]
     -- No meaningful definitions exist
     abs    = undefined
     signum = undefined
