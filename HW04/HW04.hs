@@ -26,27 +26,24 @@ instance (Num a, Eq a) => Eq (Poly a) where
 instance (Num a, Eq a, Show a) => Show (Poly a) where
     show (P []) = ""
     show (P [0]) = "0"
-    show (P ps) = foldl (\ acc s -> acc ++ " + " ++ s) (head strData) (tail strData)
+    show (P ps) = foldl (\ acc s -> concat [acc, " + ", s]) (head strData) (tail strData)
         where
-            strData = reverse revData
-            revData = filterEmpty $ map makePart $ zip psStr [0..]
-            psStr = map (\n -> show n) ps
+            strData = reverse $ filterEmpty $ map polyPart $ zip ps [0..]
             filterEmpty :: [String] -> [String]
             filterEmpty l = filter (\ i -> not ("" == i)) l
-            makePart :: (String, Integer) -> String
-            makePart ("0", _) = ""
-            makePart ("1", 0) = "1"
-            makePart ("-1", 0) = "-1"
-            makePart (c, e) = (cnst c) ++ (expn e)
-            cnst :: String -> String
-            cnst "1" = ""
-            cnst "-1" = "-"
-            cnst c = c
-            expn :: Integer -> String
-            expn 1 = "x"
-            expn (-1) = "-x"
-            expn 0 = ""
-            expn e = "x^" ++ show e
+            polyPart :: (Num a1, Eq a1, Show a1) => (a1, Integer) -> String
+            polyPart (0, _) = ""
+            polyPart (1, 0) = "1"
+            polyPart ((-1), 0) = "-1"
+            polyPart (c, e) = concat [cnst c, expn e]
+                where
+                    cnst 1 = ""
+                    cnst (-1) = "-"
+                    cnst n = show n
+                    expn 1 = "x"
+                    expn (-1) = "-x"
+                    expn 0 = ""
+                    expn m = "x^" ++ show m
 
 
 -- Exercise 4 -----------------------------------------
