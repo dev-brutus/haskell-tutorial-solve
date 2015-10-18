@@ -6,17 +6,48 @@ newtype Poly a = P [a]
 -- Exercise 1 -----------------------------------------
 
 x :: Num a => Poly a
-x = undefined
+x = P [0, 1]
 
 -- Exercise 2 ----------------------------------------
 
 instance (Num a, Eq a) => Eq (Poly a) where
-    (==) = undefined
- 
+    (P []) == (P []) = True
+    (P []) == (P (_:_)) = False
+    (P (_:_)) == (P []) = False
+    (P (x1:x1s)) == (P (x2:x2s))
+        | x1 == x2 = px1s == px2s
+        | otherwise = False
+        where
+            px1s = P x1s
+            px2s = P x2s
+
 -- Exercise 3 -----------------------------------------
 
 instance (Num a, Eq a, Show a) => Show (Poly a) where
-    show = undefined
+    show (P []) = ""
+    show (P [0]) = "0"
+    show (P ps) = foldl (\ acc s -> acc ++ " + " ++ s) (head strData) (tail strData)
+        where
+            strData = reverse revData
+            revData = filterEmpty $ map makePart $ zip psStr [0..]
+            psStr = map (\n -> show n) ps
+            filterEmpty :: [String] -> [String]
+            filterEmpty l = filter (\ i -> not ("" == i)) l
+            makePart :: (String, Integer) -> String
+            makePart ("0", _) = ""
+            makePart ("1", 0) = "1"
+            makePart ("-1", 0) = "-1"
+            makePart (c, e) = (cnst c) ++ (expn e)
+            cnst :: String -> String
+            cnst "1" = ""
+            cnst "-1" = "-"
+            cnst c = c
+            expn :: Integer -> String
+            expn 1 = "x"
+            expn (-1) = "-x"
+            expn 0 = ""
+            expn e = "x^" ++ show e
+
 
 -- Exercise 4 -----------------------------------------
 
