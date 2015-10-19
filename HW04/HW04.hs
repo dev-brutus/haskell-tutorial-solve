@@ -68,7 +68,10 @@ instance Num a => Num (Poly a) where
     (+) = plus
     (*) = times
     negate      = undefined
-    fromInteger n = P [n]
+    fromInteger n = P [n']
+        where
+            n' :: (Num b) => b
+            n' = fromInteger n 
     -- No meaningful definitions exist
     abs    = undefined
     signum = undefined
