@@ -25,7 +25,10 @@ ex2Tests = [ testF1 "countColors test" countColors
              , ([Green, Blue, Green, Orange], [0, 2, 1, 0, 1, 0])
              ]
            , testF2 "matches test" matches
-             [ ([Red, Blue, Yellow, Orange], [Red, Orange, Orange, Blue], 3) ]
+             [ ([Red, Blue, Yellow, Orange], [Red, Orange, Orange, Blue], 3) 
+             , ([Red, Red, Green, Green], [Blue, Orange, Red, Green], 2)
+             , ([Green, Green, Green, Green], [Blue, Orange, Red, Green], 1)
+             ]
            ]
 
 -- Exercise 3 -----------------------------------------
@@ -51,7 +54,10 @@ ex4Tests = [ testF2 "isConsistent test" isConsistent
 -- Exercise 5 -----------------------------------------
 
 ex5Tests :: [Test]
-ex5Tests = []
+ex5Tests = [ testF2 "filterCodes test" filterCodes
+  [ ()
+  ]
+]
 
 -- Exercise 6 -----------------------------------------
 
