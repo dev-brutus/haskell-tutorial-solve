@@ -97,12 +97,19 @@ applyP (P (x':xs)) n = x' + n * (applyP  (P xs) n)
 -- Exercise 8 -----------------------------------------
 
 class Num a => Differentiable a where
-    deriv  :: a -> a
     nderiv :: Int -> a -> a
-    nderiv = undefined
+    nderiv 0 f = f
+    nderiv 1 f = deriv f
+    nderiv n f = nderiv (n - 1) $ deriv f
+    deriv  :: a -> a
 
 -- Exercise 9 -----------------------------------------
 
 instance Num a => Differentiable (Poly a) where
-    deriv = undefined
+    deriv (P n) = P (tailOrZero newN)
+        where
+            newN = map (\(x1, x2) -> x1 * fromInteger x2) $ zip n [0..]
+            tailOrZero ([]) = [0]
+            tailOrZero ([_]) = [0]
+            tailOrZero (_:ns) = ns
 
