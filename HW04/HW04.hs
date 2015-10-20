@@ -60,14 +60,24 @@ plus (P (pa:pas)) (P (pb:pbs)) = P (pa + pb : pcs)
 -- Exercise 5 -----------------------------------------
 
 times :: Num a => Poly a -> Poly a -> Poly a
-times = undefined
+times (P mul1) pmul2 = sum $ map mul' $ zip mul1 pmul2Shifted
+    where
+        mul' (n, P p) = P (map ((*) n) p)
+        pmul2Shifted = map (shift pmul2) [0..]
+        shift :: Num a1 => Poly a1 -> Integer -> Poly a1
+        shift m 0 = m
+        shift (P m) 1 = P (0:m)
+        shift (P m) n = shift pm1 n1
+            where
+                n1 = n - 1
+                pm1 = P (0:m)
 
 -- Exercise 6 -----------------------------------------
 
 instance Num a => Num (Poly a) where
     (+) = plus
     (*) = times
-    negate      = undefined
+    negate p = p * P [-1]
     fromInteger n = P [n']
         where
             n' :: (Num b) => b
@@ -79,7 +89,10 @@ instance Num a => Num (Poly a) where
 -- Exercise 7 -----------------------------------------
 
 applyP :: Num a => Poly a -> a -> a
-applyP = undefined
+applyP (P[]) _ = 0
+applyP (P[x']) _ = x'
+applyP (P (x':xs)) n = x' + n * (applyP  (P xs) n)
+
 
 -- Exercise 8 -----------------------------------------
 
