@@ -1,1 +1,1 @@
-See http://www.seas.upenn.edu/~cis194/lectures.html
+See http://www.seas.upenn.edu/~cis194/spring15/
